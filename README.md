@@ -161,10 +161,9 @@ switch success {
 }
 ```
 
-错误处理
-
+* 错误处理
 使用采用Error协议的类型来表示错误。
-```swfit
+```swift
 enum PrinterError: Error {
     case OutOfPaper
     case NoToner
@@ -173,7 +172,7 @@ enum PrinterError: Error {
 ```
 
 使用throw来抛出一个错误并使用throws来表示一个可以抛出错误的函数。如果在函数中抛出一个错误，这个函数会立刻返回并且调用该函数的代码会进行错误处理。
-```swfit
+```swift
 func send(job: Int, toPrinter printerName: String) throws -> String {
     if printerName == "Never Has Toner" {
         throw PrinterError.noToner
@@ -192,12 +191,12 @@ do {
 ```
 
 另一种处理错误的方式使用try?将结果转换为可选的。如果函数抛出错误，该错误会被抛弃并且结果为nil。否则的话，结果会是一个包含函数返回值的可选值。
-```swfit
+```swift
 let printerSuccess = try? send(job: 1884, toPrinter: "Mergenthaler")
 let printerFailure = try? send(job: 1885, toPrinter: "Never Has Toner")
 ```
 使用defer代码块来表示在函数返回前，函数中最后执行的代码。无论函数是否会抛出错误，这段代码都将执行。使用defer，可以把函数调用之初就要执行的代码和函数调用结束时的扫尾代码写在一起，虽然这两者的执行时机截然不同。
-```swfit
+```swift
 var fridgeIsOpen = false
 let fridgeContent = ["milk", "eggs", "leftovers"]
 
@@ -217,7 +216,7 @@ fridgeContains("banana”)  //false
     ///!!!: 泛型
     在类型名后面使用where来指定对类型的需求，比如，限定类型实现某一个协议，限定两个类型是相同的，或者限定某个类必须有一个特定的父类。
     <T: Equatable>和<T> ... where T: Equatable>是等价的。
-```swfit
+```swift
 func anyCommonElements<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> Bool
     where T.Iterator.Element: Equatable, T.Iterator.Element == U.Iterator.Element {
         for lhsItem in lhs {
@@ -232,7 +231,7 @@ func anyCommonElements<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> Bool
 anyCommonElements([1, 2, 3], [3])
 ```
 
-#chapter2
+##chapter2
 
 print(_:separator:terminator:) 是一个用来输出一个或多个值到适当输出区的全局函数。如果你用 Xcode，print(_:separator:terminator:) 将会输出内容到“console”面板上。separator 和 terminator 参数具有默认值，因此你调用这个函数的时候可以忽略它们。默认情况下，该函数通过添加换行符来结束当前行。如果不想换行，可以传递一个空字符串给 terminator 参数--例如，print(someValue, terminator:"") 。关于参数默认值的更多信息，请参考默认参数值。
 
@@ -250,13 +249,13 @@ let oneMillion = 1_000_000
     let http404Error = (404, "Not Found”)
     let (statusCode, statusMessage) = http404Error
 print("The status code is \(statusCode)”)
-你可以在定义元组的时候给单个元素命名：
+* 你可以在定义元组的时候给单个元素命名：
     let http200Status = (statusCode: 200, description: "OK”) //http200Status.statusCode
     作为函数返回值时，元组非常有用。一个用来获取网页的函数可能会返回一个 (Int, String) 元组来描述是否获取成功。和只能返回一个类型的值比较起来，一个包含两个不同类型值的元组可以让函数的返回信息更有用。
     
-    
-错误处理
-```swfit
+    
+* 错误处理
+```swift
 func canThrowAnError() throws {
     // 这个函数有可能抛出错误
 }
@@ -267,25 +266,25 @@ do {
     // 有一个错误消息抛出
 }
 ```
-断言
+* 断言
 let age = -3
 assert(age >= 0, "A person's age cannot be less than zero")
 // 因为 age < 0，所以断言会触发 终止程序
 
-检测当前平台
+* 检测当前平台
 if #available(iOS 10, macOS 10.12, *) {
     // 在 iOS 使用 iOS 10 的 API, 在 macOS 使用 macOS 10.12 的 API
 } else {
     // 使用先前版本的 iOS 和 macOS 的 API
 }
 
-指定参数标签, 可读性更强  也可以用_代替
+* 指定参数标签, 可读性更强  也可以用_代替
 func someFunction(argumentLabel parameterName: Int) {
     // 在函数体内，parameterName 代表参数值
 }
 
-默认参数值
-```swfit
+* 默认参数值
+```swift
 func someFunction(parameterWithoutDefault: Int, parameterWithDefault: Int = 12) {
     // 如果你在调用时候不传第二个参数，parameterWithDefault 会值为 12 传入到函数体中。
 }
@@ -293,7 +292,7 @@ someFunction(parameterWithoutDefault: 3, parameterWithDefault: 6)
 someFunction(parameterWithoutDefault: 4) // parameterWithDefault = 12
 ```
 可变参数
-```swfit
+```swift
 func arithmeticMean(_ numbers: Double...) -> Double {
     var total: Double = 0
     for number in numbers {
@@ -302,11 +301,11 @@ func arithmeticMean(_ numbers: Double...) -> Double {
     return total / Double(numbers.count)
 }
 ```
-输入输出参数
+###输入输出参数
 函数参数默认是常量。试图在函数体中更改参数值将会导致编译错误(compile-time error)。这意味着你不能错误地更改参数值。如果你想要一个函数可以修改参数的值，并且想要在这些修改在函数调用结束后仍然存在，那么就应该把这个参数定义为输入输出参数（In-Out Parameters）。
 定义一个输入输出参数时，在参数定义前加 inout 关键字。
 你只能传递变量给输入输出参数。你不能传入常量或者字面量，因为这些量是不能被修改的。当传入的参数作为输入输出参数时，需要在参数名前加 & 符，表示这个值可以被函数修改。
-```swfit
+```swift
 func swapTwoInts(_ a: inout Int, _ b: inout Int) {
     let temporaryA = a
     a = b
@@ -315,7 +314,7 @@ func swapTwoInts(_ a: inout Int, _ b: inout Int) {
 swapTwoInts(&someInt, &anotherInt)  // 不能传入常量
 ```
 函数嵌套函数
-```swfit
+```swift
 func chooseStepFunction(backward: Bool) -> (Int) -> Int {
     func stepForward(input: Int) -> Int { return input + 1 }
     func stepBackward(input: Int) -> Int { return input - 1 }
@@ -323,11 +322,11 @@ func chooseStepFunction(backward: Bool) -> (Int) -> Int {
 }
 ```
 
-逃逸闭包
+###逃逸闭包
 当一个闭包作为参数传到一个函数中，但是这个闭包在函数返回之后才被执行，我们称该闭包从函数中逃逸。当你定义接受闭包作为参数的函数时，你可以在参数名之前标注 @escaping，用来指明这个闭包是允许“逃逸”出这个函数的。
 一种能使闭包“逃逸”出函数的方法是，将这个闭包保存在一个函数外部定义的变量中。举个例子，很多启动异步操作的函数接受一个闭包参数作为 completion handler。这类函数会在异步操作开始之后立刻返回，但是闭包直到异步操作结束后才会被调用。在这种情况下，闭包需要“逃逸”出函数，因为闭包需要在函数返回之后被调用。例如：
 
-```swfit
+```swift
 var completionHandlers: [() -> Void] = []
 func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {
     completionHandlers.append(completionHandler)
@@ -351,7 +350,7 @@ var productBarcode = Barcode.upc(8, 85909, 51226, 3)
 productBarcode = .qrCode("ABCDEFGHIJKLMNOP")
 这时，原始的Barcode.upc和其整数关联值被新的Barcode.qrCode和其字符串关联值所替代。Barcode类型的常量和变量可以存储一个.upc或者一个.qrCode（连同它们的关联值），但是在同一时间只能存储这两个值中的一个。
 像先前那样，可以使用一个 switch 语句来检查不同的条形码类型。然而，这一次，关联值可以被提取出来作为 switch 语句的一部分。你可以在switch的 case 分支代码中提取每个关联值作为一个常量（用let前缀）或者作为一个变量（用var前缀）来使用：
-```swfit
+```swift
     switch productBarcode {
     case .upc(let numberSystem, let manufacturer, let product, let check):
         print("UPC: \(numberSystem), \(manufacturer), \(product), \(check).")
@@ -365,7 +364,7 @@ productBarcode = .qrCode("ABCDEFGHIJKLMNOP")
     递归枚举是一种枚举类型，它有一个或多个枚举成员使用该枚举类型的实例作为关联值。使用递归枚举时，编译器会插入一个间接层。你可以在枚举成员前加上indirect来表示该成员可递归。
     例如，下面的例子中，枚举类型存储了简单的算术表达式：
     
-```swfit
+```swift
     enum ArithmeticExpression {
         case number(Int)
         indirect case addition(ArithmeticExpression, ArithmeticExpression)
@@ -383,6 +382,6 @@ productBarcode = .qrCode("ABCDEFGHIJKLMNOP")
         print("tenEighty and alsoTenEighty refer to the same Resolution instance.")
     }
 ```
-    字符串、数组、和字典类型的赋值与复制行为
+###字符串、数组、和字典类型的赋值与复制行为
     Swift 中，许多基本类型，诸如String，Array和Dictionary类型均以结构体的形式实现。这意味着被赋值给新的常量或变量，或者被传入函数或方法中时，它们的值会被拷贝。
     Objective-C 中NSString，NSArray和NSDictionary类型均以类的形式实现，而并非结构体。它们在被赋值或者被传入函数或方法时，不会发生值拷贝，而是传递现有实例的引用。
